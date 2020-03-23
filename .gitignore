@@ -2,3 +2,5 @@ node_modules
 screenshop.png
 tmp
 temp
+logs.csv
+package-lock.json
