@@ -2,17 +2,15 @@ const pupHelper = require('./puppeteerhelper');
 const pLimit = require('p-limit');
 const fs = require('fs');
 const moment = require('moment');
+const {noOfRequests, simultaneousRequests, siteLink} = require('./keys');
 let browser;
-const noOfRequests = 1000;
-const simultaneousRequests = 10;
-const pageURL = 'https://www.lowes.com/pd/DEWALT-5-Tool-20-Volt-Max-Power-Tool-Combo-Kit-with-Soft-Case-Charger-Included-and-2-Batteries-Included/3441520';
 
 (async () => {
   try {
     if (fs.existsSync('logs.csv')) fs.unlinkSync('logs.csv');
     browser = await pupHelper.launchBrowser();
 
-    console.log(`Script Sarted at: ${moment().format()} for: ${pageURL}`);
+    console.log(`Script Sarted at: ${moment().format()} for: ${siteLink}`);
 
     fs.writeFileSync('logs.csv', '"RequestNumber","StatusCode","StatusText","DateTime","URL"\n', 'utf8');
     console.log('RequestNumber - StatusCode - StatusText - DateTime - URL');
@@ -28,7 +26,7 @@ const pageURL = 'https://www.lowes.com/pd/DEWALT-5-Tool-20-Volt-Max-Power-Tool-C
     
     await page.close();
     await browser.close();
-    console.log(`Script Completed at: ${moment().format()} for: ${pageURL}`);
+    console.log(`Script Completed at: ${moment().format()} for: ${siteLink}`);
     return 'Completed...';
   } catch (error) {
     return error;
@@ -40,13 +38,13 @@ const sendRequest = (index) => new Promise(async (resolve, reject) => {
   try {
     page = await pupHelper.launchPage(browser);
 
-    const response = await page.goto(pageURL, {
+    const response = await page.goto(siteLink, {
       timeout: 0,
       waitUntil: 'load'
     });
     
-    fs.appendFileSync('logs.csv', `"${index+1}/${noOfRequests}","${response.status()}","${response.statusText()}","${moment().format()}","${pageURL}"\n`);
-    console.log(`${index+1}/${noOfRequests} - ${response.status()} - ${response.statusText()} - ${moment().format()} - ${pageURL}`);
+    fs.appendFileSync('logs.csv', `"${index+1}/${noOfRequests}","${response.status()}","${response.statusText()}","${moment().format()}","${siteLink}"\n`);
+    console.log(`${index+1}/${noOfRequests} - ${response.status()} - ${response.statusText()} - ${moment().format()} - ${siteLink}`);
     
     await page.close();
     resolve(true);
