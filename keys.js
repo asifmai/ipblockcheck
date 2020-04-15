@@ -1,5 +1,5 @@
 module.exports = {
     noOfRequests: 1000,
-    simultaneousRequests: 10,
-    siteLink: 'https://www.iproperty.com.sg/'
+    simultaneousRequests: 2,
+    siteLink: 'https://tradingview.com'
 }

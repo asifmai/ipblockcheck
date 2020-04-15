@@ -39,12 +39,10 @@ const sendRequest = (index) => new Promise(async (resolve, reject) => {
     page = await pupHelper.launchPage(browser);
     let response;
 
-    do {
-      response = await page.goto(siteLink, {
-        timeout: 0,
-        waitUntil: 'load'
-      });
-    } while (response.status() !== 200);
+    response = await page.goto(siteLink, {
+      timeout: 0,
+      waitUntil: 'load'
+    });
     
     fs.appendFileSync('logs.csv', `"${index+1}/${noOfRequests}","${response.status()}","${response.statusText()}","${moment().format()}","${siteLink}"\n`);
     console.log(`${index+1}/${noOfRequests} - ${response.status()} - ${response.statusText()} - ${moment().format()} - ${siteLink}`);
